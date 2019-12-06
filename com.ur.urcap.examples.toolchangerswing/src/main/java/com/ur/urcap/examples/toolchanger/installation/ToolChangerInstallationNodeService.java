@@ -22,7 +22,7 @@ public class ToolChangerInstallationNodeService implements SwingInstallationNode
 
 	@Override
 	public String getTitle(Locale locale) {
-		return "Tool Changer Swing";
+		return "Tool Changer";
 	}
 
 	@Override

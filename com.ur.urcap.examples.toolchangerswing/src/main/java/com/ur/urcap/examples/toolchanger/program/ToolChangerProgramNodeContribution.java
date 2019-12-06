@@ -18,6 +18,7 @@ import java.util.Collection;
 
 public class ToolChangerProgramNodeContribution implements ProgramNodeContribution {
 	private static final String SELECTED_TCP = "selected-tcp";
+	private static final String PROGRAM_TREE_TITLE_BASE = "Change Tool";
 
 	private final ProgramAPI programAPI;
 	private final ToolChangerProgramNodeView view;
@@ -42,14 +43,9 @@ public class ToolChangerProgramNodeContribution implements ProgramNodeContributi
 
 	@Override
 	public String getTitle() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Change Tool");
 		TCP tcp = getSelectedTCP();
-		if (tcp != null) {
-			sb.append(": ").append(tcp.getDisplayName());
-		}
 
-		return sb.toString();
+		return tcp != null ? PROGRAM_TREE_TITLE_BASE + ": " + tcp.getDisplayName() : PROGRAM_TREE_TITLE_BASE;
 	}
 
 	public Collection<TCP> getAllTCP() {
