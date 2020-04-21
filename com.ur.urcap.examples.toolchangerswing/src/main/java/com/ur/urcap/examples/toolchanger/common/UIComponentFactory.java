@@ -8,11 +8,13 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.JTextPane;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -46,7 +48,7 @@ public final class UIComponentFactory {
 		return section;
 	}
 
-	public JTextPane createTextPane(String info) {
+	private JTextPane createTextPane(String info) {
 		SimpleAttributeSet attributeSet = new SimpleAttributeSet();
 		StyleConstants.setLineSpacing(attributeSet, 0.5f);
 		StyleConstants.setLeftIndent(attributeSet, 0f);
@@ -73,7 +75,7 @@ public final class UIComponentFactory {
 		return section;
 	}
 
-	public JLabel createSmallInputFieldLabel(String label) {
+	private JLabel createSmallInputFieldLabel(String label) {
 		JLabel jLabel = new JLabel(label);
 
 		jLabel.setPreferredSize(style.getSmallInputFieldLabelSize());
@@ -81,6 +83,18 @@ public final class UIComponentFactory {
 		jLabel.setMaximumSize(style.getSmallInputFieldLabelSize());
 
 		return jLabel;
+	}
+
+	public JComboBox createComboBox(final ActionListener actionListener) {
+		JComboBox jComboBox = new JComboBox();
+
+		jComboBox.setPreferredSize(style.getInputFieldSize());
+		jComboBox.setMaximumSize(style.getInputFieldSize());
+		jComboBox.setMinimumSize(style.getInputFieldSize());
+
+		jComboBox.addActionListener(actionListener);
+
+		return jComboBox;
 	}
 
 	public <T> JTextField createNumberInputField(final KeyboardNumberInput<T> keyboardNumberInput,

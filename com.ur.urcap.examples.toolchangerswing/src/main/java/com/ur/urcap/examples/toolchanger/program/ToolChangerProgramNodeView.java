@@ -5,7 +5,6 @@ import com.ur.urcap.api.contribution.program.swing.SwingProgramNodeView;
 import com.ur.urcap.api.domain.tcp.TCP;
 import com.ur.urcap.examples.toolchanger.common.UIComponentFactory;
 import com.ur.urcap.examples.toolchanger.style.Style;
-import com.ur.urcap.examples.toolchanger.common.TCPComboBox;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,14 +26,11 @@ public class ToolChangerProgramNodeView implements SwingProgramNodeView<ToolChan
 	private static final String TCP_PLACEHOLDER = "<TCP>";
 
 	private final UIComponentFactory uiFactory;
-	private final Style style;
-	private TCPComboBox tcpsComboBox;
+	private JComboBox tcpsComboBox;
 
 	private ContributionProvider<ToolChangerProgramNodeContribution> contributionProvider;
 
-
 	public ToolChangerProgramNodeView(Style style) {
-		this.style = style;
 		this.uiFactory = new UIComponentFactory(style);
 	}
 
@@ -43,27 +39,27 @@ public class ToolChangerProgramNodeView implements SwingProgramNodeView<ToolChan
 		this.contributionProvider = provider;
 
 		jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
+
 		jPanel.add(uiFactory.createInfoSection(INFO_TEXT));
-		jPanel.add(uiFactory.createVerticalSpacing());
-		jPanel.add(uiFactory.createVerticalSpacing());
-		jPanel.add(uiFactory.createVerticalSpacing());
+		jPanel.add(uiFactory.createVerticalSpacing(3));
+
 		jPanel.add(uiFactory.createHeaderSection(SET_TOOL_TCP_TEXT));
-		jPanel.add(createInput());
+		jPanel.add(createTCPSection());
 	}
 
 	public void updateView() {
-		updateCombobox();
+		updateTCPCombobox();
 	}
 
-	private Box createInput() {
+	private Box createTCPSection() {
 		Box section = Box.createHorizontalBox();
 		section.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		tcpsComboBox = new TCPComboBox(style);
-		tcpsComboBox.addActionListener(new ActionListener() {
+		tcpsComboBox = uiFactory.createComboBox(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox comboBox = (JComboBox) e.getSource();
+
 				Object selected = comboBox.getSelectedItem();
 				if (selected instanceof TCP) {
 					TCP tcp = (TCP) comboBox.getSelectedItem();
@@ -71,19 +67,21 @@ public class ToolChangerProgramNodeView implements SwingProgramNodeView<ToolChan
 				} else {
 					contributionProvider.get().setSelectedTCP(null);
 				}
-				updateCombobox();
+
+				updateTCPCombobox();
 			}
 		});
+
 		section.add(tcpsComboBox);
 
 		return section;
 	}
 
-	private void updateCombobox() {
+	private void updateTCPCombobox() {
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
 		ToolChangerProgramNodeContribution contribution = contributionProvider.get();
-		TCP selected = contribution.getSelectedTCP();
 
+		TCP selected = contribution.getSelectedTCP();
 		if (selected != null) {
 			model.setSelectedItem(selected);
 			model.addElement(TCP_PLACEHOLDER);
@@ -92,16 +90,10 @@ public class ToolChangerProgramNodeView implements SwingProgramNodeView<ToolChan
 		}
 
 		Collection<TCP> tcps = contribution.getAllTCP();
-		if (!tcps.contains(selected)) {
-			model.addElement(selected);
-		}
 		for (TCP tcp : tcps) {
-			if (tcp.isResolvable()) {
-				model.addElement(tcp);
-			}
+			model.addElement(tcp);
 		}
 
 		tcpsComboBox.setModel(model);
 	}
-
 }
