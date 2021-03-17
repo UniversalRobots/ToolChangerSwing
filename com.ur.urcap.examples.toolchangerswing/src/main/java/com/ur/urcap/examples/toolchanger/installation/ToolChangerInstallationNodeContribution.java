@@ -6,7 +6,7 @@ import com.ur.urcap.api.domain.data.DataModel;
 import com.ur.urcap.api.domain.script.ScriptWriter;
 import com.ur.urcap.api.domain.tcp.TCP;
 import com.ur.urcap.api.domain.tcp.TCPContributionModel;
-import com.ur.urcap.api.domain.userinteraction.RobotPositionCallback;
+import com.ur.urcap.api.domain.userinteraction.RobotPositionCallback2;
 import com.ur.urcap.api.domain.userinteraction.UserInteraction;
 import com.ur.urcap.api.domain.userinteraction.inputvalidation.InputValidationFactory;
 import com.ur.urcap.api.domain.userinteraction.inputvalidation.InputValidator;
@@ -19,6 +19,7 @@ import com.ur.urcap.api.domain.userinteraction.robot.movement.RobotMovementCallb
 import com.ur.urcap.api.domain.value.Pose;
 import com.ur.urcap.api.domain.value.PoseFactory;
 import com.ur.urcap.api.domain.value.jointposition.JointPositions;
+import com.ur.urcap.api.domain.value.robotposition.PositionParameters;
 import com.ur.urcap.api.domain.value.simple.Angle;
 import com.ur.urcap.api.domain.value.simple.Length;
 import com.ur.urcap.examples.toolchanger.common.ValueProvider;
@@ -193,10 +194,10 @@ public class ToolChangerInstallationNodeContribution implements InstallationNode
 	}
 
 	public void defineToolChangerPosition() {
-		userInteraction.getUserDefinedRobotPosition(new RobotPositionCallback() {
+		userInteraction.getUserDefinedRobotPosition(new RobotPositionCallback2() {
 			@Override
-			public void onOk(Pose pose, JointPositions q) {
-				model.set(TOOL_CHANGE_JOINT_POSITIONS, q);
+			public void onOk(PositionParameters positionParameters) {
+				model.set(TOOL_CHANGE_JOINT_POSITIONS, positionParameters.getJointPositions());
 				view.setToolChangePositionDefined(true);
 			}
 		});
